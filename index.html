@@ -1,60 +1,54 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Catedral Livros - Biblioteca Digital</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catedral Livros</title>
+  <link rel="icon" href="logo.png">
+  <link rel="stylesheet" href="./styles.css">
 </head>
 <body>
-  <header>
-    <div class="topbar">
-      <div class="brand">
-        <h1>📚 Catedral Livros</h1>
-        <p class="subtitle">Livros clássicos de domínio público</p>
-      </div>
-      <div class="controls">
-        <button id="themeToggle" aria-label="Alternar tema">🌙</button>
-      </div>
+  <header class="header">
+    <div class="logo">
+      <img src="logo.png" alt="Logo Catedral Livros">
+      <h1>Catedral Livros</h1>
     </div>
-
-    <div class="search-wrap">
-      <input id="searchInput" type="text" placeholder="Pesquisar livro ou autor...">
-      <select id="categorySelect" aria-label="Filtrar por categoria">
-        <option value="todos">Todas as categorias</option>
-        <option value="romance">Romance</option>
-        <option value="filosofia">Filosofia</option>
-        <option value="contos">Contos</option>
-        <option value="literatura-estrangeira">Literatura Estrangeira</option>
-      </select>
-    </div>
+    <button id="theme-toggle" class="theme-toggle">🌗</button>
   </header>
 
-  <main>
-    <div class="livros-container" id="livrosContainer"></div>
+  <section class="intro">
+    <h2>Livros gratuitos e doações conscientes</h2>
+    <p>Baixe clássicos e obras raras. Se desejar, ajude com uma doação via Pix ❤️</p>
+  </section>
+
+  <main class="book-grid">
+    <!-- Exemplo de card -->
+    <div class="book-card">
+      <img src="https://m.media-amazon.com/images/I/61SwlZ4dQyL._AC_UF894,1000_QL80_.jpg" alt="Dom Casmurro">
+      <h3>Dom Casmurro</h3>
+      <p>Machado de Assis</p>
+      <p class="desc">Um dos maiores clássicos da literatura brasileira.</p>
+      <button class="pix-button">
+        <span class="pix-icon">💠</span> Doar via Pix
+      </button>
+    </div>
+
+    <div class="book-card">
+      <img src="https://m.media-amazon.com/images/I/71dVQZZlHkL._AC_UF1000,1000_QL80_.jpg" alt="O Cortiço">
+      <h3>O Cortiço</h3>
+      <p>Aluísio Azevedo</p>
+      <p class="desc">Realismo intenso sobre o cotidiano brasileiro do século XIX.</p>
+      <button class="pix-button">
+        <span class="pix-icon">💠</span> Doar via Pix
+      </button>
+    </div>
   </main>
 
   <footer>
-    <p>© 2025 Catedral Livros — Todos os direitos reservados.</p>
+    <p>📚 O Bibliotecário agradece pela sua ajuda à manutenção!</p>
+    <p>&copy; 2025 Catedral Livros</p>
   </footer>
 
-  <!-- Modal Pix -->
-  <div id="pixModal" class="modal" aria-hidden="true">
-    <div class="modal-content">
-      <h3>Pagamento via Pix</h3>
-      <p>Valor: <b>R$ 2,00</b></p>
-      <img class="qr" src="https://upload.wikimedia.org/wikipedia/commons/0/04/Pix_logo.svg" alt="QR Code Pix">
-      <p><b>Chave Pix:</b> catedrallivros@pix.com.br</p>
-
-      <div class="modal-actions">
-        <button class="btn" id="confirmPaidBtn">Já paguei (verificar)</button>
-        <button class="btn danger" id="closeModalBtn">Fechar</button>
-      </div>
-
-      <p class="small">A página fará verificação automática do pagamento. Se preferir, volte ao app do banco e escaneie o QR.</p>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+  <script src="./script.js"></script>
 </body>
 </html>
