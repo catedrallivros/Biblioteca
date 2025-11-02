@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Catedral Livros - Biblioteca Digital</title>
   <style>
-    /* (mesmo estilo limpo de antes) */
+    /* estilo limpo */
     body { font-family: Arial, sans-serif; background: #fff; color:#333; margin:0; padding:0; }
     header { background:#f8f8f8; padding:20px; text-align:center; border-bottom:1px solid #ddd; }
     h1{ margin:0; font-size:28px; }
@@ -70,10 +70,8 @@
   </div>
 
   <script>
-    // === CONFIG: coloque sua URL do Vercel aqui (substitua se diferente) ===
-    const VERCEL_BASE = 'https://catedrallivros.vercel.app'; // <-- troque se necessário
+    const VERCEL_BASE = 'https://api-knvy.vercel.app'; // <--- já configurado para seu projeto
 
-    // Dados dos livros (domínio público)
     const livros = [
       { titulo:"Dom Casmurro", autor:"Machado de Assis", categoria:"romance", descricao:"Um dos maiores clássicos da literatura brasileira.", imagem:"https://m.media-amazon.com/images/I/71kxa1-0zfL.jpg", link:"https://www.dominiopublico.gov.br/download/texto/ua000005.pdf" },
       { titulo:"O Alienista", autor:"Machado de Assis", categoria:"contos", descricao:"Uma sátira sobre ciência e loucura em Itaguaí.", imagem:"https://m.media-amazon.com/images/I/81a4kCNuH+L.jpg", link:"https://www.dominiopublico.gov.br/download/texto/ua000004.pdf" },
@@ -85,7 +83,7 @@
     const searchInput = document.getElementById('searchInput');
     const categorySelect = document.getElementById('categorySelect');
     let livroAtual = '';
-    let currentTx = null;
+    let currentChargeId = null;
     let pollingTimer = null;
 
     function renderizarLivros(lista) {
@@ -104,110 +102,88 @@
       });
     }
 
-    // Quando usuário clica em Comprar: cria cobrança no backend (Vercel)
     async function iniciarCompra(tituloEnc) {
       const titulo = decodeURIComponent(tituloEnc);
       livroAtual = titulo;
       try {
-        // valor fixo (exemplo)
         const valor = 2.00;
         const resp = await fetch(`${VERCEL_BASE}/api/create-charge`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ titulo, valor })
+          body: JSON.stringify({ title: titulo, value: valor })
         });
-        if (!resp.ok) {
-          const err = await resp.json().catch(()=>null);
-          alert('Erro ao criar cobrança. Tente novamente.');
-          console.error('create-charge error', err);
-          return;
-        }
+        if (!resp.ok) { alert('Erro ao criar cobrança.'); return; }
         const data = await resp.json();
-        // data: { txid, qr_code_url, expires_at, raw }
-        currentTx = data.txid || data.id || null;
-        const qr = data.qr_code_url || data.qr_code || (data.raw && data.raw.qrcode) || null;
+        currentChargeId = data.chargeId || data.id || (data.raw && data.raw.id) || null;
+        const qr = data.qr_url || (data.raw && (data.raw.qr_code_url || data.raw.qr || data.raw.qrcode));
 
-        // mostrar no modal
         const modal = document.getElementById('pixModal');
         const img = modal.querySelector('img.qr');
-        if (qr) img.src = qr;
-        else img.src = 'https://upload.wikimedia.org/wikipedia/commons/0/04/Pix_logo.svg';
+        if (qr) img.src = qr; else img.src = 'https://upload.wikimedia.org/wikipedia/commons/0/04/Pix_logo.svg';
         modal.style.display = 'flex';
 
-        // iniciar polling de status
-        startPollingStatus(currentTx);
+        if (currentChargeId) startPollingStatus(currentChargeId);
       } catch (err) {
-        console.error('Erro iniciarCompra', err);
-        alert('Erro ao iniciar cobrança.');
+        console.error('iniciarCompra error', err);
+        alert('Erro ao criar cobrança.');
       }
     }
 
-    function fecharPix() {
-      document.getElementById('pixModal').style.display = 'none';
-    }
+    function fecharPix() { document.getElementById('pixModal').style.display = 'none'; }
 
-    // Polling: chama check-status até receber paid=true
-    function startPollingStatus(txid) {
-      if (!txid) return;
+    function startPollingStatus(chargeId) {
+      if (!chargeId) return;
       if (pollingTimer) clearInterval(pollingTimer);
       pollingTimer = setInterval(async () => {
         try {
-          const r = await fetch(`${VERCEL_BASE}/api/check-status?txid=${encodeURIComponent(txid)}`);
+          const r = await fetch(`${VERCEL_BASE}/api/check-status`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ chargeId })
+          });
           if (!r.ok) return;
           const j = await r.json();
           if (j.paid) {
             clearInterval(pollingTimer);
             onPaymentConfirmed();
           }
-        } catch (err) {
-          console.error('Polling error', err);
-        }
+        } catch (err) { console.error('Polling error', err); }
       }, 3000);
     }
 
-    // Chamada quando pagamento confirmado
     function onPaymentConfirmed() {
       fecharPix();
-      // som de sucesso
       const som = new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_9e5ad91b0b.mp3?filename=correct-2-46134.mp3');
       som.volume = 0.5;
       som.play();
 
-      // mensagem + selo
       const mensagem = document.createElement('div');
       mensagem.innerHTML = `
         <div class="selo-confirmado">✅ Pagamento confirmado</div>
         <p class="mensagem-agradecimento">📚 O Bibliotecário agradece pela sua ajuda na manutenção! ❤️</p>
       `;
-
-      const id = 'baixar-' + livroAtual;
-      const botao = document.getElementById(id);
+      const btnId = 'baixar-' + livroAtual;
+      const botao = document.getElementById(btnId);
       if (botao) {
         botao.style.display = 'inline-block';
         botao.insertAdjacentElement('beforebegin', mensagem);
       }
     }
 
-    // botão "Já paguei" do modal — força verificação imediata
     async function confirmarPagamento() {
-      if (!currentTx) {
-        alert('Nenhuma cobrança ativa.');
-        fecharPix();
-        return;
-      }
+      if (!currentChargeId) { alert('Nenhuma cobrança ativa.'); fecharPix(); return; }
       try {
-        const r = await fetch(`${VERCEL_BASE}/api/check-status?txid=${encodeURIComponent(currentTx)}`);
-        if (!r.ok) { alert('Erro ao verificar pagamento.'); return; }
+        const r = await fetch(`${VERCEL_BASE}/api/check-status`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ chargeId: currentChargeId })
+        });
         const j = await r.json();
         if (j.paid) onPaymentConfirmed();
         else alert('Pagamento ainda não confirmado. A verificação automática continuará.');
-      } catch (err) {
-        console.error('confirmarPagamento error', err);
-        alert('Erro ao verificar pagamento.');
-      }
+      } catch (err) { console.error('confirmarPagamento error', err); alert('Erro ao verificar pagamento.'); }
     }
 
-    // Pesquisa e filtro
     function filtrarLivros() {
       const termo = (searchInput.value || '').toLowerCase();
       const categoria = categorySelect.value;
@@ -219,8 +195,6 @@
     }
     searchInput.addEventListener('input', filtrarLivros);
     categorySelect.addEventListener('change', filtrarLivros);
-
-    // Inicial
     renderizarLivros(livros);
   </script>
 </body>
