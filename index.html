@@ -130,6 +130,11 @@
       margin: 10px auto;
     }
 
+    /* Animação suave para mensagens */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
   </style>
 </head>
 <body>
@@ -207,7 +212,6 @@
     const container = document.getElementById("livrosContainer");
     const searchInput = document.getElementById("searchInput");
     const categorySelect = document.getElementById("categorySelect");
-
     let livroAtual = '';
 
     function renderizarLivros(lista) {
@@ -235,37 +239,38 @@
       document.getElementById('pixModal').style.display = 'none';
     }
 
+    // ✅ Função atualizada com som e mensagem de agradecimento
     function confirmarPagamento() {
-  fecharPix(); // Fecha o modal Pix
+      fecharPix();
 
-  // Cria o elemento da mensagem
-  const mensagem = document.createElement("div");
-  mensagem.innerHTML = `
-    <p style="
-      background:#e8f5e9;
-      border:1px solid #4caf50;
-      color:#2e7d32;
-      padding:15px;
-      border-radius:8px;
-      margin:15px 0;
-      font-size:16px;
-      animation: fadeIn 1s ease-in-out;
-    ">
-      📚 O Bibliotecário agradece pela sua ajuda na manutenção! ❤️
-    </p>
-  `;
+      // Som suave de confirmação
+      const som = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_9e5ad91b0b.mp3?filename=correct-2-46134.mp3");
+      som.volume = 0.5;
+      som.play();
 
-  // Exibe o botão de download
-  const id = 'baixar-' + livroAtual;
-  const botao = document.getElementById(id);
-  if (botao) {
-    botao.style.display = 'inline-block';
-    botao.insertAdjacentElement('beforebegin', mensagem);
-  }
-}
+      // Mensagem de agradecimento
+      const mensagem = document.createElement("div");
+      mensagem.innerHTML = `
+        <p style="
+          background:#e8f5e9;
+          border:1px solid #4caf50;
+          color:#2e7d32;
+          padding:15px;
+          border-radius:8px;
+          margin:15px 0;
+          font-size:16px;
+          animation: fadeIn 1s ease-in-out;
+        ">
+          📚 O Bibliotecário agradece pela sua ajuda na manutenção! ❤️
+        </p>
+      `;
 
-// E adicione esta pequena animação no final do <style> do seu HTML:
-
+      const id = 'baixar-' + livroAtual;
+      const botao = document.getElementById(id);
+      if (botao) {
+        botao.style.display = 'inline-block';
+        botao.insertAdjacentElement('beforebegin', mensagem);
+      }
     }
 
     function filtrarLivros() {
@@ -285,4 +290,3 @@
   </script>
 </body>
 </html>
-
