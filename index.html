@@ -3,41 +3,100 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Catedral Livros</title>
-  <link rel="stylesheet" href="style.css">
+  <title>Catedral Livros - Biblioteca Digital</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #333;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #f8f8f8;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+    h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+    .livros-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 25px;
+      padding: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .livro {
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+      padding: 15px;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+    .livro:hover {
+      transform: translateY(-5px);
+    }
+    .livro img {
+      width: 100%;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
+    .livro h3 {
+      margin: 10px 0 5px;
+    }
+    .livro p {
+      font-size: 14px;
+      color: #555;
+      height: 60px;
+      overflow: hidden;
+    }
+    .btn {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-decoration: none;
+      color: white;
+      background-color: #007bff;
+      transition: background-color 0.3s;
+    }
+    .btn:hover {
+      background-color: #0056b3;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      background: #f8f8f8;
+      border-top: 1px solid #ddd;
+    }
+    #pixModal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      justify-content: center;
+      align-items: center;
+    }
+    #pixModal .conteudo {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      text-align: center;
+      max-width: 400px;
+    }
+    #pixModal img {
+      width: 200px;
+      margin: 10px auto;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <h1>Catedral Livros</h1>
-    <button id="theme-toggle">🌙 Modo Escuro</button>
-  </header>
-
-  <main>
-    <section class="livros">
-      <div class="livro">
-        <img src="https://via.placeholder.com/150x220?text=Livro+1" alt="Livro 1">
-        <h2>Livro 1</h2>
-        <a href="#" class="btn">Baixar</a>
-      </div>
-
-      <div class="livro">
-        <img src="https://via.placeholder.com/150x220?text=Livro+2" alt="Livro 2">
-        <h2>Livro 2</h2>
-        <a href="#" class="btn">Baixar</a>
-      </div>
-
-      <div class="livro">
-        <img src="https://via.placeholder.com/150x220?text=Livro+3" alt="Livro 3">
-        <h2>Livro 3</h2>
-        <a href="#" class="btn">Baixar</a>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <p>© 2025 Catedral Livros — Todos os direitos reservados.</p>
-  </footer>
-
-  <script src="script.js"></script>
-</body>
-</html>
+  <hea
