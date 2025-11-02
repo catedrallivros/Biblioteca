@@ -1,156 +1,37 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Catedral Livros - Biblioteca Digital</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #ffffff;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
+    /* (mesmo estilo limpo de antes) */
+    body { font-family: Arial, sans-serif; background: #fff; color:#333; margin:0; padding:0; }
+    header { background:#f8f8f8; padding:20px; text-align:center; border-bottom:1px solid #ddd; }
+    h1{ margin:0; font-size:28px; }
+    .search-bar{ margin-top:15px; }
+    input[type="text"]{ width:60%; padding:10px; border-radius:5px; border:1px solid #ccc; font-size:16px; }
+    select{ padding:10px; border-radius:5px; border:1px solid #ccc; font-size:16px; }
+    .livros-container{ display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:25px; padding:30px; max-width:1200px; margin:auto; }
+    .livro{ border:1px solid #ddd; border-radius:8px; background:#fff; box-shadow:0 2px 5px rgba(0,0,0,0.05); padding:15px; text-align:center; transition:transform .2s; }
+    .livro:hover{ transform:translateY(-5px); }
+    .livro img{ width:100%; height:300px; object-fit:cover; border-radius:6px; }
+    .livro h3{ margin:10px 0 5px; }
+    .livro p{ font-size:14px; color:#555; height:60px; overflow:hidden; }
+    .btn{ display:inline-block; margin-top:10px; padding:10px 15px; border-radius:5px; text-decoration:none; color:white; background:#007bff; transition:background .3s; cursor:pointer; }
+    .btn:hover{ background:#0056b3; }
+    footer{ text-align:center; padding:20px; background:#f8f8f8; border-top:1px solid #ddd; }
 
-    header {
-      background-color: #f8f8f8;
-      padding: 20px;
-      text-align: center;
-      border-bottom: 1px solid #ddd;
-    }
+    /* Modal Pix */
+    #pixModal{ display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; }
+    #pixModal .conteudo{ background:#fff; padding:20px; border-radius:8px; text-align:center; max-width:420px; width:90%; }
+    #pixModal img.qr{ width:220px; height:220px; object-fit:contain; margin:10px auto; }
 
-    h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-
-    .search-bar {
-      margin-top: 15px;
-    }
-
-    input[type="text"] {
-      width: 60%;
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-
-    select {
-      padding: 10px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-    }
-
-    .livros-container {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 25px;
-      padding: 30px;
-      max-width: 1200px;
-      margin: auto;
-    }
-
-    .livro {
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      background-color: #fff;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-      padding: 15px;
-      text-align: center;
-      transition: transform 0.2s ease;
-    }
-
-    .livro:hover {
-      transform: translateY(-5px);
-    }
-
-    .livro img {
-      width: 100%;
-      height: 300px;
-      object-fit: cover;
-      border-radius: 6px;
-    }
-
-    .livro h3 {
-      margin: 10px 0 5px;
-    }
-
-    .livro p {
-      font-size: 14px;
-      color: #555;
-      height: 60px;
-      overflow: hidden;
-    }
-
-    .btn {
-      display: inline-block;
-      margin-top: 10px;
-      padding: 10px 15px;
-      border-radius: 5px;
-      text-decoration: none;
-      color: white;
-      background-color: #007bff;
-      transition: background-color 0.3s;
-    }
-
-    .btn:hover {
-      background-color: #0056b3;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px;
-      background: #f8f8f8;
-      border-top: 1px solid #ddd;
-    }
-
-    #pixModal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.6);
-      justify-content: center;
-      align-items: center;
-    }
-
-    #pixModal .conteudo {
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      text-align: center;
-      max-width: 400px;
-    }
-
-    #pixModal img {
-      width: 200px;
-      margin: 10px auto;
-    }
-
-    /* Animações */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-
-    .selo-confirmado {
-      display: inline-block;
-      background: #4caf50;
-      color: white;
-      padding: 6px 10px;
-      border-radius: 20px;
-      font-size: 14px;
-      margin-bottom: 10px;
-      animation: bounce 1s infinite;
-    }
+    /* Animações / selo */
+    @keyframes fadeIn { from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+    @keyframes bounce { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-5px);} }
+    .selo-confirmado{ display:inline-block; background:#4caf50; color:#fff; padding:6px 10px; border-radius:20px; font-size:14px; margin-bottom:10px; animation:bounce 1s infinite; }
+    .mensagem-agradecimento { background:#e8f5e9; border:1px solid #4caf50; color:#2e7d32; padding:15px; border-radius:8px; margin:10px 0; font-size:16px; animation:fadeIn 1s ease-in-out; }
   </style>
 </head>
 <body>
@@ -158,7 +39,7 @@
     <h1>📚 Catedral Livros</h1>
     <p>Livros clássicos de domínio público</p>
     <div class="search-bar">
-      <input type="text" id="searchInput" placeholder="Pesquisar livro...">
+      <input id="searchInput" type="text" placeholder="Pesquisar livro...">
       <select id="categorySelect">
         <option value="todos">Todas as categorias</option>
         <option value="romance">Romance</option>
@@ -169,117 +50,134 @@
     </div>
   </header>
 
-  <div class="livros-container" id="livrosContainer">
-    <!-- Os livros serão inseridos via JavaScript -->
-  </div>
+  <div class="livros-container" id="livrosContainer"></div>
 
-  <footer>
-    <p>© 2025 Catedral Livros — Todos os direitos reservados.</p>
-  </footer>
+  <footer><p>© 2025 Catedral Livros — Todos os direitos reservados.</p></footer>
 
+  <!-- Modal Pix -->
   <div id="pixModal">
     <div class="conteudo">
       <h3>Pagamento via Pix</h3>
-      <p>Valor: R$ 5,00</p>
-      <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Pix_logo.svg" alt="QR Code Pix">
-      <p><b>Chave Pix:</b> https://livepix.gg/catedrallivros</p>
-      <button class="btn" onclick="confirmarPagamento()">Já paguei</button>
-      <br><br>
-      <button class="btn" style="background-color: #dc3545;" onclick="fecharPix()">Fechar</button>
+      <p>Valor: <b>R$ 2,00</b></p>
+      <img class="qr" src="https://upload.wikimedia.org/wikipedia/commons/0/04/Pix_logo.svg" alt="QR Code Pix">
+      <p><b>Chave Pix:</b> catedrallivros@pix.com.br</p>
+      <div style="margin-top:10px;">
+        <button class="btn" onclick="confirmarPagamento()">Já paguei (verificar)</button>
+        <button class="btn" style="background:#dc3545;" onclick="fecharPix()">Fechar</button>
+      </div>
+      <p style="font-size:12px;color:#666;margin-top:8px;">A página fará verificação automática do pagamento.</p>
     </div>
   </div>
 
   <script>
+    // === CONFIG: coloque sua URL do Vercel aqui (substitua se diferente) ===
+    const VERCEL_BASE = 'https://catedrallivros.vercel.app'; // <-- troque se necessário
+
+    // Dados dos livros (domínio público)
     const livros = [
-      {
-        titulo: "Dom Casmurro",
-        autor: "Machado de Assis",
-        categoria: "romance",
-        descricao: "Um dos maiores clássicos da literatura brasileira.",
-        imagem: "https://m.media-amazon.com/images/I/71kxa1-0zfL.jpg",
-        link: "https://www.dominiopublico.gov.br/download/texto/ua000005.pdf"
-      },
-      {
-        titulo: "O Alienista",
-        autor: "Machado de Assis",
-        categoria: "contos",
-        descricao: "Uma sátira sobre ciência e loucura em Itaguaí.",
-        imagem: "https://m.media-amazon.com/images/I/81a4kCNuH+L.jpg",
-        link: "https://www.dominiopublico.gov.br/download/texto/ua000004.pdf"
-      },
-      {
-        titulo: "A Metamorfose",
-        autor: "Franz Kafka",
-        categoria: "literatura-estrangeira",
-        descricao: "A transformação de um homem em inseto e suas consequências.",
-        imagem: "https://m.media-amazon.com/images/I/71dFAGPqYpL.jpg",
-        link: "https://www.dominiopublico.gov.br/download/texto/uf000001.pdf"
-      },
-      {
-        titulo: "Assim Falou Zaratustra",
-        autor: "Friedrich Nietzsche",
-        categoria: "filosofia",
-        descricao: "Obra-prima da filosofia moderna sobre a superação humana.",
-        imagem: "https://m.media-amazon.com/images/I/81-6vVnM0BL.jpg",
-        link: "https://www.dominiopublico.gov.br/download/texto/ph000001.pdf"
-      }
+      { titulo:"Dom Casmurro", autor:"Machado de Assis", categoria:"romance", descricao:"Um dos maiores clássicos da literatura brasileira.", imagem:"https://m.media-amazon.com/images/I/71kxa1-0zfL.jpg", link:"https://www.dominiopublico.gov.br/download/texto/ua000005.pdf" },
+      { titulo:"O Alienista", autor:"Machado de Assis", categoria:"contos", descricao:"Uma sátira sobre ciência e loucura em Itaguaí.", imagem:"https://m.media-amazon.com/images/I/81a4kCNuH+L.jpg", link:"https://www.dominiopublico.gov.br/download/texto/ua000004.pdf" },
+      { titulo:"A Metamorfose", autor:"Franz Kafka", categoria:"literatura-estrangeira", descricao:"A transformação de um homem em inseto e suas consequências.", imagem:"https://m.media-amazon.com/images/I/71dFAGPqYpL.jpg", link:"https://www.dominiopublico.gov.br/download/texto/uf000001.pdf" },
+      { titulo:"Assim Falou Zaratustra", autor:"Friedrich Nietzsche", categoria:"filosofia", descricao:"Obra-prima da filosofia moderna sobre a superação humana.", imagem:"https://m.media-amazon.com/images/I/81-6vVnM0BL.jpg", link:"https://www.dominiopublico.gov.br/download/texto/ph000001.pdf" }
     ];
 
-    const container = document.getElementById("livrosContainer");
-    const searchInput = document.getElementById("searchInput");
-    const categorySelect = document.getElementById("categorySelect");
+    const container = document.getElementById('livrosContainer');
+    const searchInput = document.getElementById('searchInput');
+    const categorySelect = document.getElementById('categorySelect');
     let livroAtual = '';
+    let currentTx = null;
+    let pollingTimer = null;
 
     function renderizarLivros(lista) {
       container.innerHTML = '';
       lista.forEach(livro => {
-        const card = document.createElement("div");
-        card.classList.add("livro");
+        const card = document.createElement('div');
+        card.className = 'livro';
         card.innerHTML = `
           <img src="${livro.imagem}" alt="${livro.titulo}">
           <h3>${livro.titulo}</h3>
           <p><b>${livro.autor}</b><br>${livro.descricao}</p>
-          <a href="#" class="btn" onclick="abrirPix('${livro.titulo}')">Comprar via Pix</a>
+          <button class="btn" onclick="iniciarCompra('${encodeURIComponent(livro.titulo)}')">Comprar via Pix</button>
           <a href="${livro.link}" class="btn" id="baixar-${livro.titulo}" style="display:none;">Baixar Livro</a>
         `;
         container.appendChild(card);
       });
     }
 
-    function abrirPix(livro) {
-      livroAtual = livro;
-      document.getElementById('pixModal').style.display = 'flex';
+    // Quando usuário clica em Comprar: cria cobrança no backend (Vercel)
+    async function iniciarCompra(tituloEnc) {
+      const titulo = decodeURIComponent(tituloEnc);
+      livroAtual = titulo;
+      try {
+        // valor fixo (exemplo)
+        const valor = 2.00;
+        const resp = await fetch(`${VERCEL_BASE}/api/create-charge`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ titulo, valor })
+        });
+        if (!resp.ok) {
+          const err = await resp.json().catch(()=>null);
+          alert('Erro ao criar cobrança. Tente novamente.');
+          console.error('create-charge error', err);
+          return;
+        }
+        const data = await resp.json();
+        // data: { txid, qr_code_url, expires_at, raw }
+        currentTx = data.txid || data.id || null;
+        const qr = data.qr_code_url || data.qr_code || (data.raw && data.raw.qrcode) || null;
+
+        // mostrar no modal
+        const modal = document.getElementById('pixModal');
+        const img = modal.querySelector('img.qr');
+        if (qr) img.src = qr;
+        else img.src = 'https://upload.wikimedia.org/wikipedia/commons/0/04/Pix_logo.svg';
+        modal.style.display = 'flex';
+
+        // iniciar polling de status
+        startPollingStatus(currentTx);
+      } catch (err) {
+        console.error('Erro iniciarCompra', err);
+        alert('Erro ao iniciar cobrança.');
+      }
     }
 
     function fecharPix() {
       document.getElementById('pixModal').style.display = 'none';
     }
 
-    // ✅ Função completa com selo, som e mensagem animada
-    function confirmarPagamento() {
-      fecharPix();
+    // Polling: chama check-status até receber paid=true
+    function startPollingStatus(txid) {
+      if (!txid) return;
+      if (pollingTimer) clearInterval(pollingTimer);
+      pollingTimer = setInterval(async () => {
+        try {
+          const r = await fetch(`${VERCEL_BASE}/api/check-status?txid=${encodeURIComponent(txid)}`);
+          if (!r.ok) return;
+          const j = await r.json();
+          if (j.paid) {
+            clearInterval(pollingTimer);
+            onPaymentConfirmed();
+          }
+        } catch (err) {
+          console.error('Polling error', err);
+        }
+      }, 3000);
+    }
 
-      // Som de confirmação
-      const som = new Audio("https://cdn.pixabay.com/download/audio/2022/03/15/audio_9e5ad91b0b.mp3?filename=correct-2-46134.mp3");
+    // Chamada quando pagamento confirmado
+    function onPaymentConfirmed() {
+      fecharPix();
+      // som de sucesso
+      const som = new Audio('https://cdn.pixabay.com/download/audio/2022/03/15/audio_9e5ad91b0b.mp3?filename=correct-2-46134.mp3');
       som.volume = 0.5;
       som.play();
 
-      // Cria o selo e a mensagem
-      const mensagem = document.createElement("div");
+      // mensagem + selo
+      const mensagem = document.createElement('div');
       mensagem.innerHTML = `
         <div class="selo-confirmado">✅ Pagamento confirmado</div>
-        <p style="
-          background:#e8f5e9;
-          border:1px solid #4caf50;
-          color:#2e7d32;
-          padding:15px;
-          border-radius:10px;
-          margin:10px 0;
-          font-size:16px;
-          animation: fadeIn 1s ease-in-out;
-        ">
-          📚 O Bibliotecário agradece pela sua ajuda na manutenção! ❤️
-        </p>
+        <p class="mensagem-agradecimento">📚 O Bibliotecário agradece pela sua ajuda na manutenção! ❤️</p>
       `;
 
       const id = 'baixar-' + livroAtual;
@@ -290,8 +188,28 @@
       }
     }
 
+    // botão "Já paguei" do modal — força verificação imediata
+    async function confirmarPagamento() {
+      if (!currentTx) {
+        alert('Nenhuma cobrança ativa.');
+        fecharPix();
+        return;
+      }
+      try {
+        const r = await fetch(`${VERCEL_BASE}/api/check-status?txid=${encodeURIComponent(currentTx)}`);
+        if (!r.ok) { alert('Erro ao verificar pagamento.'); return; }
+        const j = await r.json();
+        if (j.paid) onPaymentConfirmed();
+        else alert('Pagamento ainda não confirmado. A verificação automática continuará.');
+      } catch (err) {
+        console.error('confirmarPagamento error', err);
+        alert('Erro ao verificar pagamento.');
+      }
+    }
+
+    // Pesquisa e filtro
     function filtrarLivros() {
-      const termo = searchInput.value.toLowerCase();
+      const termo = (searchInput.value || '').toLowerCase();
       const categoria = categorySelect.value;
       const filtrados = livros.filter(livro =>
         (livro.titulo.toLowerCase().includes(termo) || livro.autor.toLowerCase().includes(termo)) &&
@@ -299,12 +217,11 @@
       );
       renderizarLivros(filtrados);
     }
+    searchInput.addEventListener('input', filtrarLivros);
+    categorySelect.addEventListener('change', filtrarLivros);
 
-    searchInput.addEventListener("input", filtrarLivros);
-    categorySelect.addEventListener("change", filtrarLivros);
-
+    // Inicial
     renderizarLivros(livros);
   </script>
 </body>
 </html>
-
