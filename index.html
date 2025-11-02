@@ -12,16 +12,38 @@
       margin: 0;
       padding: 0;
     }
+
     header {
       background-color: #f8f8f8;
       padding: 20px;
       text-align: center;
       border-bottom: 1px solid #ddd;
     }
+
     h1 {
       margin: 0;
       font-size: 28px;
     }
+
+    .search-bar {
+      margin-top: 15px;
+    }
+
+    input[type="text"] {
+      width: 60%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    select {
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
     .livros-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -30,6 +52,7 @@
       max-width: 1200px;
       margin: auto;
     }
+
     .livro {
       border: 1px solid #ddd;
       border-radius: 8px;
@@ -39,24 +62,29 @@
       text-align: center;
       transition: transform 0.2s ease;
     }
+
     .livro:hover {
       transform: translateY(-5px);
     }
+
     .livro img {
       width: 100%;
       height: 300px;
       object-fit: cover;
       border-radius: 6px;
     }
+
     .livro h3 {
       margin: 10px 0 5px;
     }
+
     .livro p {
       font-size: 14px;
       color: #555;
       height: 60px;
       overflow: hidden;
     }
+
     .btn {
       display: inline-block;
       margin-top: 10px;
@@ -67,15 +95,18 @@
       background-color: #007bff;
       transition: background-color 0.3s;
     }
+
     .btn:hover {
       background-color: #0056b3;
     }
+
     footer {
       text-align: center;
       padding: 20px;
       background: #f8f8f8;
       border-top: 1px solid #ddd;
     }
+
     #pixModal {
       display: none;
       position: fixed;
@@ -85,6 +116,7 @@
       justify-content: center;
       align-items: center;
     }
+
     #pixModal .conteudo {
       background: #fff;
       padding: 30px;
@@ -92,11 +124,139 @@
       text-align: center;
       max-width: 400px;
     }
+
     #pixModal img {
       width: 200px;
       margin: 10px auto;
     }
+
   </style>
 </head>
 <body>
-  <hea
+  <header>
+    <h1>📚 Catedral Livros</h1>
+    <p>Livros clássicos de domínio público</p>
+    <div class="search-bar">
+      <input type="text" id="searchInput" placeholder="Pesquisar livro...">
+      <select id="categorySelect">
+        <option value="todos">Todas as categorias</option>
+        <option value="romance">Romance</option>
+        <option value="filosofia">Filosofia</option>
+        <option value="contos">Contos</option>
+        <option value="literatura-estrangeira">Literatura Estrangeira</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="livros-container" id="livrosContainer">
+    <!-- Os livros serão inseridos via JavaScript -->
+  </div>
+
+  <footer>
+    <p>© 2025 Catedral Livros — Todos os direitos reservados.</p>
+  </footer>
+
+  <div id="pixModal">
+    <div class="conteudo">
+      <h3>Pagamento via Pix</h3>
+      <p>Valor: R$ 2,00</p>
+      <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Pix_logo.svg" alt="QR Code Pix">
+      <p><b>Chave Pix:</b> catedrallivros@pix.com.br</p>
+      <button class="btn" onclick="confirmarPagamento()">Já paguei</button>
+      <br><br>
+      <button class="btn" style="background-color: #dc3545;" onclick="fecharPix()">Fechar</button>
+    </div>
+  </div>
+
+  <script>
+    const livros = [
+      {
+        titulo: "Dom Casmurro",
+        autor: "Machado de Assis",
+        categoria: "romance",
+        descricao: "Um dos maiores clássicos da literatura brasileira.",
+        imagem: "https://m.media-amazon.com/images/I/71kxa1-0zfL.jpg",
+        link: "https://www.dominiopublico.gov.br/download/texto/ua000005.pdf"
+      },
+      {
+        titulo: "O Alienista",
+        autor: "Machado de Assis",
+        categoria: "contos",
+        descricao: "Uma sátira sobre ciência e loucura em Itaguaí.",
+        imagem: "https://m.media-amazon.com/images/I/81a4kCNuH+L.jpg",
+        link: "https://www.dominiopublico.gov.br/download/texto/ua000004.pdf"
+      },
+      {
+        titulo: "A Metamorfose",
+        autor: "Franz Kafka",
+        categoria: "literatura-estrangeira",
+        descricao: "A transformação de um homem em inseto e suas consequências.",
+        imagem: "https://m.media-amazon.com/images/I/71dFAGPqYpL.jpg",
+        link: "https://www.dominiopublico.gov.br/download/texto/uf000001.pdf"
+      },
+      {
+        titulo: "Assim Falou Zaratustra",
+        autor: "Friedrich Nietzsche",
+        categoria: "filosofia",
+        descricao: "Obra-prima da filosofia moderna sobre a superação humana.",
+        imagem: "https://m.media-amazon.com/images/I/81-6vVnM0BL.jpg",
+        link: "https://www.dominiopublico.gov.br/download/texto/ph000001.pdf"
+      }
+    ];
+
+    const container = document.getElementById("livrosContainer");
+    const searchInput = document.getElementById("searchInput");
+    const categorySelect = document.getElementById("categorySelect");
+
+    let livroAtual = '';
+
+    function renderizarLivros(lista) {
+      container.innerHTML = '';
+      lista.forEach(livro => {
+        const card = document.createElement("div");
+        card.classList.add("livro");
+        card.innerHTML = `
+          <img src="${livro.imagem}" alt="${livro.titulo}">
+          <h3>${livro.titulo}</h3>
+          <p><b>${livro.autor}</b><br>${livro.descricao}</p>
+          <a href="#" class="btn" onclick="abrirPix('${livro.titulo}')">Comprar via Pix</a>
+          <a href="${livro.link}" class="btn" id="baixar-${livro.titulo}" style="display:none;">Baixar Livro</a>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function abrirPix(livro) {
+      livroAtual = livro;
+      document.getElementById('pixModal').style.display = 'flex';
+    }
+
+    function fecharPix() {
+      document.getElementById('pixModal').style.display = 'none';
+    }
+
+    function confirmarPagamento() {
+      alert('Pagamento confirmado! Baixe seu livro abaixo.');
+      const id = 'baixar-' + livroAtual;
+      const botao = document.getElementById(id);
+      if (botao) botao.style.display = 'inline-block';
+      fecharPix();
+    }
+
+    function filtrarLivros() {
+      const termo = searchInput.value.toLowerCase();
+      const categoria = categorySelect.value;
+      const filtrados = livros.filter(livro =>
+        (livro.titulo.toLowerCase().includes(termo) || livro.autor.toLowerCase().includes(termo)) &&
+        (categoria === 'todos' || livro.categoria === categoria)
+      );
+      renderizarLivros(filtrados);
+    }
+
+    searchInput.addEventListener("input", filtrarLivros);
+    categorySelect.addEventListener("change", filtrarLivros);
+
+    renderizarLivros(livros);
+  </script>
+</body>
+</html>
