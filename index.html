@@ -4,116 +4,40 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Catedral Livros</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      margin: 0;
-      background-color: #f9f9f9;
-      color: #333;
-    }
-
-    header {
-      background-color: #4a2c2a;
-      color: white;
-      padding: 1rem 2rem;
-      text-align: center;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: 2rem;
-    }
-
-    .container {
-      max-width: 1000px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
-
-    .livros {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .livro {
-      background-color: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      padding: 1rem;
-      text-align: center;
-      transition: transform 0.2s ease;
-    }
-
-    .livro:hover {
-      transform: translateY(-5px);
-    }
-
-    .livro img {
-      width: 100%;
-      border-radius: 6px;
-      height: 300px;
-      object-fit: cover;
-    }
-
-    .livro h3 {
-      margin: 0.5rem 0;
-      font-size: 1.1rem;
-    }
-
-    .btn {
-      display: inline-block;
-      background-color: #4a2c2a;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 6px;
-      text-decoration: none;
-      transition: background-color 0.3s;
-    }
-
-    .btn:hover {
-      background-color: #6b3a35;
-    }
-
-    footer {
-      text-align: center;
-      background-color: #4a2c2a;
-      color: white;
-      padding: 1rem;
-      margin-top: 2rem;
-    }
-  </style>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
     <h1>Catedral Livros</h1>
-    <p>Baixe e leia gratuitamente!</p>
+    <button id="theme-toggle">🌙 Modo Escuro</button>
   </header>
 
-  <div class="container">
-    <div class="livros">
+  <main>
+    <section class="livros">
       <div class="livro">
-        <img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f" alt="Livro 1">
-        <h3>O Poder da Mente</h3>
+        <img src="https://via.placeholder.com/150x220?text=Livro+1" alt="Livro 1">
+        <h2>Livro 1</h2>
         <a href="#" class="btn">Baixar</a>
       </div>
 
       <div class="livro">
-        <img src="https://images.unsplash.com/photo-1528207776546-365bb710ee93" alt="Livro 2">
-        <h3>Histórias para Inspirar</h3>
+        <img src="https://via.placeholder.com/150x220?text=Livro+2" alt="Livro 2">
+        <h2>Livro 2</h2>
         <a href="#" class="btn">Baixar</a>
       </div>
 
       <div class="livro">
-        <img src="https://images.unsplash.com/photo-1529655683826-aba9b3e77383" alt="Livro 3">
-        <h3>Viagem ao Conhecimento</h3>
+        <img src="https://via.placeholder.com/150x220?text=Livro+3" alt="Livro 3">
+        <h2>Livro 3</h2>
         <a href="#" class="btn">Baixar</a>
       </div>
-    </div>
-  </div>
+    </section>
+  </main>
 
   <footer>
-    <p>© 2025 Catedral Livros — Criado com GitHub Pages</p>
+    <p>© 2025 Catedral Livros — Todos os direitos reservados.</p>
   </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
