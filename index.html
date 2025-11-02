@@ -236,11 +236,36 @@
     }
 
     function confirmarPagamento() {
-      alert('Pagamento confirmado! Baixe seu livro abaixo.');
-      const id = 'baixar-' + livroAtual;
-      const botao = document.getElementById(id);
-      if (botao) botao.style.display = 'inline-block';
-      fecharPix();
+  fecharPix(); // Fecha o modal Pix
+
+  // Cria o elemento da mensagem
+  const mensagem = document.createElement("div");
+  mensagem.innerHTML = `
+    <p style="
+      background:#e8f5e9;
+      border:1px solid #4caf50;
+      color:#2e7d32;
+      padding:15px;
+      border-radius:8px;
+      margin:15px 0;
+      font-size:16px;
+      animation: fadeIn 1s ease-in-out;
+    ">
+      📚 O Bibliotecário agradece pela sua ajuda na manutenção! ❤️
+    </p>
+  `;
+
+  // Exibe o botão de download
+  const id = 'baixar-' + livroAtual;
+  const botao = document.getElementById(id);
+  if (botao) {
+    botao.style.display = 'inline-block';
+    botao.insertAdjacentElement('beforebegin', mensagem);
+  }
+}
+
+// E adicione esta pequena animação no final do <style> do seu HTML:
+
     }
 
     function filtrarLivros() {
@@ -260,3 +285,4 @@
   </script>
 </body>
 </html>
+
